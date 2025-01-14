@@ -1,7 +1,9 @@
 package com.Erp_System.serviceimplementation;
 
+import com.Erp_System.Entity.Role;
 import com.Erp_System.Entity.User;
 import com.Erp_System.Helper.Helper;
+import com.Erp_System.repository.RoleRepo;
 import com.Erp_System.response.PaegableResponse;
 import com.Erp_System.dto.UserDto;
 import com.Erp_System.exception.ResourceNotFoundException;
@@ -15,9 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,11 +29,20 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
 
     @Autowired
+    private RoleRepo roleRepo;
+    @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto createUser(UserDto userDto) {
         User createUser = modelMapper.map(userDto, User.class);
+
+        Role role = roleRepo.findByRoleName("ROLE_USER").orElseThrow(() -> new ResourceNotFoundException("Role is not found"));
+        createUser.setRoles(List.of(role));
+        createUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User saveUser = userRepo.save(createUser);
 
         UserDto createdUser = modelMapper.map(saveUser, UserDto.class);
@@ -47,7 +60,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(int userId, UserDto userDto) {
         User users = userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User is not found"));
-        UserDto createUser = modelMapper.map(userId, UserDto.class);
+        UserDto createUser = modelMapper.map(users, UserDto.class);
 
         createUser.setAbout(userDto.getAbout());
         createUser.setGender(userDto.getGender());

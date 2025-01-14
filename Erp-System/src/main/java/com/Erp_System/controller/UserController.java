@@ -10,6 +10,7 @@ import com.Erp_System.service.FileService;
 import com.Erp_System.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,13 +41,13 @@ public class UserController {
     private String imageUploadPath;
 
     @PostMapping("/create")
-    public ResponseEntity<UserDto> createUsers(@RequestBody UserDto user){
+    public ResponseEntity<UserDto> createUsers(@RequestBody @Valid UserDto user){
         UserDto user1 = userService.createUser(user);
         return new ResponseEntity<>(user1, HttpStatus.CREATED);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUsers(@PathVariable int userId,@RequestBody UserDto user){
+    public ResponseEntity<UserDto> updateUsers(@PathVariable int userId,@RequestBody @Valid UserDto user){
         UserDto updateUser = userService.updateUser(userId, user);
         return new ResponseEntity<>(updateUser,HttpStatus.OK);
     }
@@ -98,3 +99,7 @@ public class UserController {
 
     }
 }
+
+
+
+
