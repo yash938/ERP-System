@@ -10,7 +10,8 @@ import java.util.List;
 @Entity
 public class Department {
     @Id
-    private String departmentId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int departmentId;
 
     @Column(nullable = false)
     private String title;

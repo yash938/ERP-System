@@ -10,7 +10,8 @@ import java.util.List;
 @Data
 public class University {
     @Id
-    private String universityId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int universityId;
 
     @Column(nullable = false)
     private String title;

@@ -10,7 +10,8 @@ import java.util.List;
 @Entity
 public class Zone {
     @Id
-    private String zoneId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int zoneId;
 
     @Column(nullable = false)
     private String title;

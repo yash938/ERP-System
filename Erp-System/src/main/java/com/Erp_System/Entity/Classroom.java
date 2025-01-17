@@ -8,7 +8,8 @@ import lombok.Data;
 public class Classroom {
 
     @Id
-    private String classroomId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int classroomId;
 
     @Column(nullable = false)
     private String title;
