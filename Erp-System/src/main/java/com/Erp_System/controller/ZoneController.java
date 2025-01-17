@@ -1,8 +1,10 @@
 package com.Erp_System.controller;
 
+import com.Erp_System.dto.UniversityDto;
 import com.Erp_System.dto.ZoneDto;
 import com.Erp_System.response.PaegableResponse;
 import com.Erp_System.response.Utils;
+import com.Erp_System.service.UniversityService;
 import com.Erp_System.service.ZoneService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ import java.time.LocalDate;
 public class ZoneController {
     @Autowired
     private ZoneService zoneService;
+
+    @Autowired
+    private UniversityService universityService;
 
     @PostMapping("/create")
     public ResponseEntity<ZoneDto> createZones(@RequestBody @Valid ZoneDto zoneDto){
@@ -54,4 +59,13 @@ public class ZoneController {
         Utils deletedZone = Utils.builder().status(HttpStatus.OK).message("zone is deleted successfully").date(LocalDate.now()).build();
         return new ResponseEntity<>(deletedZone,HttpStatus.OK);
     }
+
+
+    @PostMapping("/{zoneId}/university")
+    public ResponseEntity<UniversityDto> createWithZones(@PathVariable int zoneId, @RequestBody UniversityDto universityDto){
+        UniversityDto withZone = universityService.createWithZone(zoneId, universityDto);
+        return new ResponseEntity<>(withZone,HttpStatus.OK);
+    }
+
+
 }
