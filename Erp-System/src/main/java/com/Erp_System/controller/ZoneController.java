@@ -67,5 +67,21 @@ public class ZoneController {
         return new ResponseEntity<>(withZone,HttpStatus.OK);
     }
 
+    @PutMapping("/{zoneId}/universities/{universityId}")
+    public ResponseEntity<UniversityDto> updateZoneWithUniversiy(@PathVariable int universityId,@PathVariable int zoneID){
+        UniversityDto universityDto = universityService.updateZoneUniversity(zoneID, universityId);
+        return new ResponseEntity<>(universityDto,HttpStatus.OK);
+    }
+
+    @GetMapping("/{zoneId}/allZones")
+    public ResponseEntity<PaegableResponse<UniversityDto>> getAllZoneInUniversity(@PathVariable int zoneId,
+                                                                                  @RequestParam(value = "pageNumber",defaultValue = "0",required = false) int pageNumber,
+                                                                                  @RequestParam(value = "pageSize",defaultValue = "20",required = false) int pageSize,
+                                                                                  @RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir,
+                                                                                  @RequestParam(value = "sortBy",defaultValue = "title",required = false) String sortBy
+                                                                                  ){
+        PaegableResponse<UniversityDto> byZone = universityService.findByZone(zoneId, pageNumber, pageSize, sortDir, sortBy);
+        return new ResponseEntity<>(byZone,HttpStatus.OK);
+    }
 
 }

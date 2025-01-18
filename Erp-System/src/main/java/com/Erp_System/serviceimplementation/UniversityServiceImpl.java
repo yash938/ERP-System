@@ -78,7 +78,7 @@ public class UniversityServiceImpl implements UniversityService {
         return Helper.getPaegable(byZone,UniversityDto.class);
     }
 
-    public UniversityDto updateZoneOfUniversity(int zoneId,int universityId){
+    public UniversityDto updateZoneUniversity(int zoneId,int universityId){
         University university = universityRepo.findById(universityId).orElseThrow(() -> new ResourceNotFoundException("university is not found"));
         Zone zone = zoneRepo.findById(zoneId).orElseThrow(() -> new ResourceNotFoundException("zone is not found"));
         

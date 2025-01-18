@@ -12,4 +12,5 @@ public interface UniversityService {
 
     UniversityDto createWithZone(int zoneId,UniversityDto universityDto);
     PaegableResponse<UniversityDto> findByZone(int zoneId,int pageNumber,int pageSize,String sortDir,String sortBy);
+    UniversityDto updateZoneUniversity(int zoneId,int universityId);
 }
