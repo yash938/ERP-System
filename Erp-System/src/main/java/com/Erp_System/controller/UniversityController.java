@@ -50,19 +50,20 @@ public class UniversityController {
         return  new ResponseEntity<>(university,HttpStatus.OK);
     }
 
-    @PostMapping("/${universityId}/university")
+    @PostMapping("/{universityId}/university")
     public ResponseEntity<DepartmentDto> createWithDepartment(@PathVariable int universityId, @RequestBody DepartmentDto departmentDto){
         DepartmentDto withUniversity = departmentService.createWithUniversity(universityId, departmentDto);
         return new ResponseEntity<>(withUniversity,HttpStatus.OK);
     }
 
-    @PutMapping("/${universityId}/update/${departmentId}")
+    @PutMapping("/{universityId}/update/{departmentId}")
     public ResponseEntity<DepartmentDto> updateUniversityOfDepartment(@PathVariable int universityId,int departmentId){
         DepartmentDto departmentDto = departmentService.updateWithUniversity(universityId, departmentId);
         return new ResponseEntity<>(departmentDto,HttpStatus.OK);
     }
 
 
+    @GetMapping("/{universityId}/allUniversity")
     public ResponseEntity<PaegableResponse<DepartmentDto>> allUniversityOfDepartment(
             @PathVariable int universityId,
             @RequestParam(value = "pageNumber",defaultValue = "0",required = false) int pageNumber,

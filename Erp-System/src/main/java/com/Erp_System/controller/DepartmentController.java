@@ -1,8 +1,10 @@
 package com.Erp_System.controller;
 
+import com.Erp_System.dto.ClassroomDto;
 import com.Erp_System.dto.DepartmentDto;
 import com.Erp_System.response.PaegableResponse;
 import com.Erp_System.response.Utils;
+import com.Erp_System.service.ClassroomService;
 import com.Erp_System.service.DepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class DepartmentController {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private ClassroomService classroomService;
 
     @PostMapping("/create")
     public ResponseEntity<DepartmentDto> createDepartment(@RequestBody @Valid DepartmentDto departmentDto){
@@ -54,5 +59,29 @@ public class DepartmentController {
         departmentService.delete(departmentId);
         Utils delete = Utils.builder().message("department deleted !! ").status(HttpStatus.OK).date(LocalDate.now()).build();
         return new ResponseEntity<>(delete,HttpStatus.OK);
+    }
+
+    @PostMapping("/{departmentId}/classroom")
+    public ResponseEntity<ClassroomDto> createClassroomWithDepartment(@PathVariable int departmentId,@RequestBody ClassroomDto classroomDto){
+        ClassroomDto createClassroom = classroomService.createWithDepartment(classroomDto, departmentId);
+        return new ResponseEntity<>(createClassroom,HttpStatus.OK);
+    }
+
+    @PutMapping("/{classroomId}/department/{departmentId}")
+    public ResponseEntity<ClassroomDto> updateClassroomWithdepartment(@PathVariable int classroomId,@PathVariable int departmentId){
+        ClassroomDto classroomDto = classroomService.updateClassroom(classroomId, departmentId);
+        return new ResponseEntity<>(classroomDto,HttpStatus.OK);
+    }
+
+    @GetMapping("/allDepartment/{departmentId}")
+    public ResponseEntity<PaegableResponse<ClassroomDto>> getAllDepartmentWithClassroom(
+            @PathVariable int departmentId,
+            @RequestParam(value = "pageNumber",defaultValue = "0",required = false) int pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = "20",required = false) int pageSize,
+            @RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir,
+            @RequestParam(value = "sortBy",defaultValue = "title",required = false) String sortBy
+    ){
+        PaegableResponse<ClassroomDto> allOfClassroom = classroomService.getAllOfClassroom(departmentId, pageNumber, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(allOfClassroom,HttpStatus.OK);
     }
 }
